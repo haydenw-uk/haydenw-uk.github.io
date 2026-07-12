@@ -1,13 +1,5 @@
 [
   {
-    "name": "Money-Mission",
-    "title": "Money Mission",
-    "description": "A mini project built and shared in public on GitHub Pages.",
-    "url": "https://haydenw-uk.github.io/Money-Mission/",
-    "repoUrl": "https://github.com/haydenw-uk/Money-Mission",
-    "language": "GitHub Pages"
-  },
-  {
     "name": "earworm-website",
     "title": "Earworm Website",
     "description": "A small project built and shared in public.",
@@ -15,5 +7,13 @@
     "repoUrl": "https://github.com/haydenw-uk/earworm-website",
     "language": "CSS",
     "updatedAt": "2026-07-08T00:54:02Z"
+  },
+  {
+    "name": "Money-Mission",
+    "title": "Money Mission",
+    "description": "A mini project built and shared in public on GitHub Pages.",
+    "url": "https://haydenw-uk.github.io/Money-Mission/",
+    "repoUrl": "https://github.com/haydenw-uk/Money-Mission",
+    "language": "GitHub Pages"
   }
 ]
