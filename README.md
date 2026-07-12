@@ -1,14 +1,38 @@
-# haydenw-uk.github.io
+# Project Lab
 
-The landing page for [haydenwilliams.dev](https://www.haydenwilliams.dev) and Hayden's public mini projects.
+The GitHub Pages home for Hayden Williams' project websites and showcases.
 
-## How the project list stays current
+It provides a direct link to [haydenwilliams.dev](https://www.haydenwilliams.dev) and an automatically maintained index of all Lab Projects.
 
-The page reads `projects.json`. The `Refresh project index` GitHub Actions workflow rebuilds that file every six hours by querying repositories owned by `haydenw-uk` and keeping repositories that have GitHub Pages enabled.
+## Project index
 
-This means a new public GitHub Pages mini project appears in the navigation automatically after the next scheduled refresh. Existing entries are retained when GitHub does not expose their backing repository publicly, which keeps public Pages sites such as Money Mission in the index.
+The page reads `projects.json`. The `Refresh project index` GitHub Actions workflow runs every six hours and can also be started manually.
 
-For fully automatic discovery of Pages sites backed by private repositories, add a fine-grained GitHub token with read-only repository metadata access as an Actions secret named `PROJECT_INDEX_TOKEN`. The workflow will use it automatically when present.
+The workflow:
+
+* Finds repositories owned by `haydenw-uk` with GitHub Pages enabled
+* Builds the project website URL and display metadata
+* Records GitHub statistics such as stars, forks, open issues, language, and update time
+* Keeps existing entries when GitHub does not expose the backing repository publicly
+* Commits changes to `projects.json` only when the index changes
+
+The Project Lab cycles through the generated data in the GitHub Signals panel. The project cards remain the primary navigation, with one click access to each website.
+
+## Private Pages repositories
+
+For fully automatic discovery of GitHub Pages sites backed by private repositories, add a fine-grained GitHub token with read-only repository metadata access as an Actions secret named `PROJECT_INDEX_TOKEN`.
+
+The token must be able to read the relevant private repositories. The workflow uses it automatically when present and falls back to `GITHUB_TOKEN` when it is not.
+
+## Local development
+
+The site is a static HTML, CSS, and JavaScript project. Serve the directory locally to test `projects.json` loading:
+
+```bash
+python3 -m http.server 8765
+```
+
+Then open `http://localhost:8765/`.
 
 ## Deployment
 

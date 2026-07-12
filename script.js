@@ -7,6 +7,23 @@ const statsValue = document.querySelector("#stats-value");
 const statsDetail = document.querySelector("#stats-detail");
 const statsProgress = document.querySelector("#stats-progress");
 let statsTimer;
+const fallbackProjects = [
+  {
+    name: "earworm-website",
+    title: "Earworm Website",
+    url: "https://haydenw-uk.github.io/earworm-website/",
+    language: "CSS",
+    stars: 0,
+    forks: 0,
+    updatedAt: "2026-07-08T00:54:02Z",
+  },
+  {
+    name: "Money-Mission",
+    title: "Money Mission",
+    url: "https://haydenw-uk.github.io/Money-Mission/",
+    language: "GitHub Pages",
+  },
+];
 
 currentYear.textContent = new Date().getFullYear();
 
@@ -53,11 +70,11 @@ function renderStats(projects) {
   )];
   const publicStars = projects.reduce((total, project) => total + (Number(project.stars) || 0), 0);
   const forks = projects.reduce((total, project) => total + (Number(project.forks) || 0), 0);
-  const latestUpdate = projects
+  const updates = projects
     .map((project) => project.updatedAt)
     .filter(Boolean)
     .sort()
-    .at(-1);
+  const latestUpdate = updates[updates.length - 1];
   const stats = [
     { label: "PAGES INDEXED", value: projects.length, detail: "GitHub Pages websites" },
     { label: "LANGUAGES", value: languages.length, detail: languages.join(" / ") || "Index updating" },
@@ -132,14 +149,10 @@ async function loadProjects() {
 
     renderProjects(await response.json());
   } catch (error) {
-    renderProjects([{
-      name: "Money-Mission",
-      title: "Money Mission",
-      url: "https://haydenw-uk.github.io/Money-Mission/",
-      language: "GitHub Pages",
-    }]);
+    renderProjects(fallbackProjects);
     console.warn("Could not load the generated project index.", error);
   }
 }
 
+renderProjects(fallbackProjects);
 loadProjects();
