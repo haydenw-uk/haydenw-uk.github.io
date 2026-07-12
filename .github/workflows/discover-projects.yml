@@ -22,10 +22,11 @@ jobs:
       - name: Discover public GitHub Pages repositories
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.PROJECT_INDEX_TOKEN || secrets.GITHUB_TOKEN }}
           script: |
             const fs = require("fs");
             const owner = "haydenw-uk";
+            const existingProjects = JSON.parse(fs.readFileSync("projects.json", "utf8"));
             const repositories = await github.paginate(github.rest.repos.listForUser, {
               username: owner,
               type: "owner",
@@ -34,9 +35,8 @@ jobs:
               per_page: 100
             });
 
-            const projects = repositories
+            const discoveredProjects = repositories
               .filter((repository) => repository.name.toLowerCase() !== `${owner}.github.io`)
-              .filter((repository) => repository.visibility === "public")
               .filter((repository) => repository.has_pages && !repository.archived)
               .map((repository) => ({
                 name: repository.name,
@@ -49,6 +49,15 @@ jobs:
                 language: repository.language || "GitHub Pages",
                 updatedAt: repository.pushed_at || repository.updated_at
               }));
+
+            // Keep live entries that cannot be returned by the public API, such as
+            // Pages sites backed by private repositories. Adding PROJECT_INDEX_TOKEN
+            // lets the same discovery call include those repositories automatically.
+            const discoveredNames = new Set(discoveredProjects.map((project) => project.name));
+            const projects = [
+              ...discoveredProjects,
+              ...existingProjects.filter((project) => !discoveredNames.has(project.name))
+            ];
 
             fs.writeFileSync("projects.json", `${JSON.stringify(projects, null, 2)}\n`);
 
