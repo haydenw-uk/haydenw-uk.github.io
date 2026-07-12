@@ -1,0 +1,64 @@
+name: Refresh project index
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - projects.json
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out landing page
+        uses: actions/checkout@v4
+
+      - name: Discover public GitHub Pages repositories
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require("fs");
+            const owner = "haydenw-uk";
+            const repositories = await github.paginate(github.rest.repos.listForUser, {
+              username: owner,
+              type: "owner",
+              sort: "updated",
+              direction: "desc",
+              per_page: 100
+            });
+
+            const projects = repositories
+              .filter((repository) => repository.name.toLowerCase() !== `${owner}.github.io`)
+              .filter((repository) => repository.visibility === "public")
+              .filter((repository) => repository.has_pages && !repository.archived)
+              .map((repository) => ({
+                name: repository.name,
+                title: repository.name
+                  .replace(/[-_]+/g, " ")
+                  .replace(/\b\w/g, (letter) => letter.toUpperCase()),
+                description: repository.description || "A small project built and shared in public.",
+                url: repository.homepage || `https://${owner}.github.io/${repository.name}/`,
+                repoUrl: repository.html_url,
+                language: repository.language || "GitHub Pages",
+                updatedAt: repository.pushed_at || repository.updated_at
+              }));
+
+            fs.writeFileSync("projects.json", `${JSON.stringify(projects, null, 2)}\n`);
+
+      - name: Commit changed project index
+        run: |
+          if git diff --quiet -- projects.json; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add projects.json
+          git commit -m "chore: refresh GitHub Pages project index"
+          git push
