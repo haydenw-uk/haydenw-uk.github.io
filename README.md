@@ -1,6 +1,6 @@
 # Project Lab
 
-The GitHub Pages home for Hayden Williams' project websites and showcases.
+The Project Lab area for Hayden Williams's project showcases and websites.
 
 It provides a direct link to [haydenwilliams.dev](https://www.haydenwilliams.dev) and an automatically maintained index of all Lab Projects.
 
