@@ -47,6 +47,9 @@ jobs:
                 url: repository.homepage || `https://${owner}.github.io/${repository.name}/`,
                 repoUrl: repository.html_url,
                 language: repository.language || "GitHub Pages",
+                stars: repository.stargazers_count || 0,
+                forks: repository.forks_count || 0,
+                openIssues: repository.open_issues_count || 0,
                 updatedAt: repository.pushed_at || repository.updated_at
               }));
 

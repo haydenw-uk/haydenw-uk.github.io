@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Projects by Hayden Williams." />
+    <meta name="description" content="Project Lab by Hayden Williams. Professional project websites hosted on GitHub Pages." />
     <meta name="theme-color" content="#1e3c72" />
-    <title>Hayden Williams | Projects</title>
+    <title>Hayden Williams | Project Lab</title>
     <link rel="stylesheet" href="styles.css" />
     <script src="script.js" defer></script>
   </head>
@@ -28,30 +28,29 @@
       <main>
         <section class="hero" aria-labelledby="page-title">
           <div class="hero-copy-block">
-            <p class="eyebrow">01 / PROJECT LAB</p>
-            <h1 id="page-title">Build.<br /><span>Test. Repeat.</span></h1>
-            <p class="hero-copy">Experimental tools, products, and ideas.</p>
+            <p class="eyebrow">01 / PROJECT WEBSITES</p>
+            <h1 id="page-title">Project Lab</h1>
+            <p class="hero-copy">Mostly experimental project websites/showcases which are hosted through GitHub Pages</p>
             <div class="hero-actions">
-              <a class="button button-primary" href="#projects">Enter the lab <span aria-hidden="true">↓</span></a>
+              <a class="button button-primary" href="#projects">See the projects <span aria-hidden="true">↓</span></a>
               <a class="button button-secondary" href="https://www.haydenwilliams.dev">Main site <span aria-hidden="true">↗</span></a>
             </div>
           </div>
 
-          <div class="lab-console glass-panel" aria-label="Project Lab status console">
+          <div class="lab-console stats-console glass-panel" aria-label="Live GitHub Pages project statistics">
             <div class="console-top">
-              <span>LAB.STATUS</span>
-              <span class="console-online">ONLINE</span>
+              <span>GITHUB / SIGNALS</span>
+              <span class="console-online">LIVE</span>
             </div>
-            <div class="console-grid" aria-hidden="true"></div>
-            <div class="console-orbit orbit-one" aria-hidden="true"></div>
-            <div class="console-orbit orbit-two" aria-hidden="true"></div>
-            <div class="console-core">
-              <span class="core-mark">HW</span>
-              <span class="core-label">EXPERIMENTAL</span>
+            <div class="stats-stage" id="stats-stage" aria-live="polite">
+              <span class="stats-label" id="stats-label">PAGES INDEXED</span>
+              <strong class="stats-value" id="stats-value">00</strong>
+              <span class="stats-detail" id="stats-detail">Loading project data</span>
             </div>
+            <div class="stats-track" aria-hidden="true"><span id="stats-progress"></span></div>
             <div class="console-bottom">
-              <span>BUILD / 01</span>
-              <span>OPEN / INPUT</span>
+              <span>PROJECTS.JSON</span>
+              <span>LIVE DATA</span>
             </div>
           </div>
         </section>
@@ -59,14 +58,14 @@
         <section class="projects-section glass-panel" id="projects" aria-labelledby="projects-title">
           <div class="section-heading">
             <div>
-              <p class="eyebrow">02 / LIVE INDEX</p>
-              <h2 id="projects-title">Current builds</h2>
+              <p class="eyebrow">02 / ALL PROJECTS</p>
+              <h2 id="projects-title">All Lab Projects</h2>
             </div>
             <span class="project-count" id="project-count" aria-label="Number of projects">00</span>
           </div>
 
           <div class="project-list" id="project-list" aria-live="polite">
-            <div class="loading-state">Loading projects<span class="loading-dots" aria-hidden="true">...</span></div>
+            <div class="loading-state">Loading builds<span class="loading-dots" aria-hidden="true">...</span></div>
           </div>
         </section>
       </main>

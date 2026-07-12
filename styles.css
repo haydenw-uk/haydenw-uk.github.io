@@ -252,6 +252,7 @@ h1 span {
   overflow: hidden;
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.08);
+  isolation: isolate;
 }
 
 .console-top,
@@ -278,71 +279,64 @@ h1 span {
   color: var(--white-soft);
 }
 
-.console-grid {
+.stats-stage {
   position: absolute;
-  inset: 3.5rem 2rem;
-  opacity: 0.6;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.16) 1px, transparent 1px);
-  background-size: 30px 30px;
-  mask-image: radial-gradient(circle, black 28%, transparent 72%);
-  -webkit-mask-image: radial-gradient(circle, black 28%, transparent 72%);
-}
-
-.console-orbit {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.orbit-one {
-  width: 55%;
-  height: 55%;
-  border-right-color: transparent;
-  animation: orbit-spin 14s linear infinite;
-}
-
-.orbit-two {
-  width: 73%;
-  height: 31%;
-  border-left-color: transparent;
-  transform: translate(-50%, -50%) rotate(38deg);
-  animation: orbit-scan 10s linear infinite;
-}
-
-.console-core {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 2;
+  inset: 3.6rem 1.2rem 3.6rem;
   display: grid;
-  width: 34%;
-  aspect-ratio: 1;
-  place-content: center;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 45px rgba(255, 255, 255, 0.14);
+  align-content: center;
+  justify-items: center;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.06);
   text-align: center;
-  transform: translate(-50%, -50%);
 }
 
-.core-mark {
-  font-size: clamp(1.25rem, 4vw, 2rem);
-  font-weight: 600;
-  letter-spacing: 3px;
+.stats-stage.stats-enter {
+  animation: stats-in 600ms ease both;
 }
 
-.core-label {
-  margin-top: 0.35rem;
+.stats-label,
+.stats-detail {
   color: var(--white-muted);
   font-family: var(--font-mono);
-  font-size: 0.5rem;
   letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.stats-label {
+  font-size: 0.66rem;
+}
+
+.stats-value {
+  margin: 0.55rem 0 0.35rem;
+  font-size: clamp(4rem, 10vw, 6.5rem);
+  font-weight: 600;
+  letter-spacing: 3px;
+  line-height: 0.9;
+}
+
+.stats-detail {
+  max-width: 90%;
+  font-size: 0.7rem;
+  line-height: 1.5;
+}
+
+.stats-track {
+  position: absolute;
+  right: 1.2rem;
+  bottom: 2.7rem;
+  left: 1.2rem;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.stats-track span {
+  display: block;
+  width: 20%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.75);
+  transition: width 600ms ease;
 }
 
 .projects-section {
@@ -486,19 +480,14 @@ h2 {
   50% { background-position: 100% 50%; }
 }
 
-@keyframes orbit-spin {
-  from { transform: translate(-50%, -50%) rotate(0deg); }
-  to { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-@keyframes orbit-scan {
-  from { transform: translate(-50%, -50%) rotate(38deg); }
-  to { transform: translate(-50%, -50%) rotate(-322deg); }
-}
-
 @keyframes dots {
   0% { width: 0; }
   100% { width: 1.5rem; }
+}
+
+@keyframes stats-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .site-footer {

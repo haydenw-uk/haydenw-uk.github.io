@@ -1,6 +1,12 @@
 const projectList = document.querySelector("#project-list");
 const projectCount = document.querySelector("#project-count");
 const currentYear = document.querySelector("#current-year");
+const statsStage = document.querySelector("#stats-stage");
+const statsLabel = document.querySelector("#stats-label");
+const statsValue = document.querySelector("#stats-value");
+const statsDetail = document.querySelector("#stats-detail");
+const statsProgress = document.querySelector("#stats-progress");
+let statsTimer;
 
 currentYear.textContent = new Date().getFullYear();
 
@@ -28,6 +34,58 @@ function safeUrl(value) {
   }
 }
 
+function formatDate(value) {
+  if (!value) {
+    return "SYNCING";
+  }
+
+  return new Intl.DateTimeFormat("en-GB", {
+    month: "short",
+    year: "numeric",
+  }).format(new Date(value)).toUpperCase();
+}
+
+function renderStats(projects) {
+  const languages = [...new Set(
+    projects
+      .map((project) => project.language)
+      .filter((language) => language && language !== "GitHub Pages"),
+  )];
+  const publicStars = projects.reduce((total, project) => total + (Number(project.stars) || 0), 0);
+  const forks = projects.reduce((total, project) => total + (Number(project.forks) || 0), 0);
+  const latestUpdate = projects
+    .map((project) => project.updatedAt)
+    .filter(Boolean)
+    .sort()
+    .at(-1);
+  const stats = [
+    { label: "PAGES INDEXED", value: projects.length, detail: "GitHub Pages websites" },
+    { label: "LANGUAGES", value: languages.length, detail: languages.join(" / ") || "Index updating" },
+    { label: "PUBLIC STARS", value: publicStars, detail: "Across indexed repositories" },
+    { label: "FORKS", value: forks, detail: "Across indexed repositories" },
+    { label: "LAST UPDATED", value: formatDate(latestUpdate), detail: "From the project index" },
+  ];
+  let index = 0;
+
+  function showStat() {
+    const stat = stats[index];
+    statsLabel.textContent = stat.label;
+    statsValue.textContent = typeof stat.value === "number"
+      ? new Intl.NumberFormat("en-GB").format(stat.value).padStart(2, "0")
+      : stat.value;
+    statsDetail.textContent = stat.detail;
+    statsProgress.style.width = `${((index + 1) / stats.length) * 100}%`;
+    statsStage.classList.remove("stats-enter");
+    void statsStage.offsetWidth;
+    statsStage.classList.add("stats-enter");
+    index = (index + 1) % stats.length;
+  }
+
+  clearInterval(statsTimer);
+  showStat();
+  statsTimer = setInterval(showStat, 3200);
+}
+
 function renderProjects(projects) {
   const visibleProjects = projects
     .map((project) => ({
@@ -38,9 +96,10 @@ function renderProjects(projects) {
     .filter((project) => project.title && project.url);
 
   projectCount.textContent = String(visibleProjects.length).padStart(2, "0");
+  renderStats(visibleProjects);
 
   if (!visibleProjects.length) {
-    projectList.innerHTML = '<p class="empty-state">No live projects found yet.</p>';
+    projectList.innerHTML = '<p class="empty-state">No projects yet.</p>';
     return;
   }
 
@@ -73,15 +132,12 @@ async function loadProjects() {
 
     renderProjects(await response.json());
   } catch (error) {
-    projectCount.textContent = "01";
-    projectList.innerHTML = `
-      <a class="project-card" href="https://haydenw-uk.github.io/Money-Mission/" target="_blank" rel="noreferrer">
-        <span class="project-index">01</span>
-        <span class="project-content">
-          <h3>Money Mission</h3>
-      </span>
-        <span class="project-meta"><span>GitHub Pages</span><span class="project-arrow" aria-hidden="true">↗</span></span>
-      </a>`;
+    renderProjects([{
+      name: "Money-Mission",
+      title: "Money Mission",
+      url: "https://haydenw-uk.github.io/Money-Mission/",
+      language: "GitHub Pages",
+    }]);
     console.warn("Could not load the generated project index.", error);
   }
 }
