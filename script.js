@@ -46,7 +46,6 @@ function renderProjects(projects) {
 
   projectList.innerHTML = visibleProjects
     .map((project, index) => {
-      const description = project.description || "A small project built and shared in public.";
       const language = project.language || "GitHub Pages";
 
       return `
@@ -54,7 +53,6 @@ function renderProjects(projects) {
           <span class="project-index">${String(index + 1).padStart(2, "0")}</span>
           <span class="project-content">
             <h3>${escapeHtml(project.title)}</h3>
-            <p>${escapeHtml(description)}</p>
           </span>
           <span class="project-meta">
             <span>${escapeHtml(language)}</span>
@@ -81,8 +79,7 @@ async function loadProjects() {
         <span class="project-index">01</span>
         <span class="project-content">
           <h3>Money Mission</h3>
-          <p>Open the mini project on GitHub Pages.</p>
-        </span>
+      </span>
         <span class="project-meta"><span>GitHub Pages</span><span class="project-arrow" aria-hidden="true">↗</span></span>
       </a>`;
     console.warn("Could not load the generated project index.", error);
